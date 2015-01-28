@@ -1,5 +1,4 @@
-package org.apache.spark.streaming.azure.servicebus
-
+package org.apache.spark.streaming.messaging
 
 import java.util.BitSet
 
@@ -15,7 +14,7 @@ object AzureUtils {
 
     def createStream(
                       ssc: StreamingContext,
-                      receiver : AzureServiceBusSession,
+                      receiver : AzureMessagingSession,
                       filters: Seq[String] = Nil,
                       storageLevel: StorageLevel = StorageLevel.MEMORY_AND_DISK_SER_2
                       ): ReceiverInputDStream[String] = {
