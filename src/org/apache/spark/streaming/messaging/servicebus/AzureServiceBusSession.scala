@@ -28,17 +28,22 @@ class AzureServiceBusSession(namespace: String, entityName : String, subscriptio
   val requestType = requestTypeFunc
 
   def receiveNext = {
+
     val result = Http("%shead?timeout=5" format requestType)
       .method("DELETE")
       .header("Authorization", authorisationHeader(sas))
       .header("Host", hostHeader(namespace))
       .header("User-Agent", "Brisk")
       .asString
+
     if(result.code != 200 && result.code != 201) {
+
+      logInfo("DELETE %shead?timeout=5\n\nAuthorization: %s\nHost: %s\nUser-Agent: Brisk".format(
+        requestType, authorisationHeader(sas), hostHeader(namespace)))
       logInfo("Message returned with result code : " + result.code)
-      logInfo("Message returned with result header : " + authorisationHeader(sas))
-      logInfo("URI : " + requestType)
+
     }
+    logInfo( result.body )
     result.body
   }
 
