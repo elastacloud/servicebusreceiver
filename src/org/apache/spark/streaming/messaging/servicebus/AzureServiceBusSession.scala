@@ -19,13 +19,22 @@ class AzureServiceBusSession(namespace: String, entityName : String, subscriptio
   def topicRequest (namespace : String, topicName : String, subscriptionName : String) = {
     "https://%s.servicebus.windows.net/%s/subscriptions/%s/messages/".format(namespace, topicName, subscriptionName)
   }
+  def topicSend (namespace : String, topicName : String) = {
+    "https://%s.servicebus.windows.net/%s/messages?timeout=60".format(namespace, topicName)
+  }
 
   def requestTypeFunc = subscriptionName match {
     case Some(_) => topicRequest(namespace, entityName, subscriptionName.get)
     case _ => queueRequest(namespace, entityName)
   }
 
+  lazy val sendType = subscriptionName match {
+    case Some(_) => topicSend(namespace, entityName)
+    case _ => queueRequest(namespace, entityName)
+  }
+
   val requestType = requestTypeFunc
+
 
   def receiveNext = {
 
@@ -48,7 +57,7 @@ class AzureServiceBusSession(namespace: String, entityName : String, subscriptio
   }
 
   def send (messageText : String) = {
-    val result = Http(requestType)
+    val result = Http(sendType)
       .method("POST")
       .header("Authorization", authorisationHeader(sas))
       .header("Host", hostHeader(namespace))
@@ -57,8 +66,8 @@ class AzureServiceBusSession(namespace: String, entityName : String, subscriptio
       .postData(messageText)
       .asString
     result.code match {
-      case 201 => println("message (\"%s\") was sent" format messageText)
-      case _ => println("error occurred %d" format result.code)
+      case 201 => println("message (\"%s\")" format messageText)
+      case _ => println("error occurred %d for request type %s".format(result.code, requestType))
     }
   }
 

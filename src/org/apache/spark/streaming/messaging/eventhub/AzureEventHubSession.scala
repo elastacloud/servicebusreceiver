@@ -25,7 +25,7 @@ class AzureEventHubSession(namespace: String, entityName : String, sas : String)
       .postData(messageText)
       .asString
     result.code match {
-      case 201 => println("message (\"%s\") was sent" format messageText)
+      case 201 => println("message (\"%s\") was sent to %s".format(messageText, sendRequest))
       case _ => println("error occurred %d" format result.code)
     }
   }

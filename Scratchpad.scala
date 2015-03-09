@@ -1,10 +1,11 @@
-/**
- * Created by Richard on 1/23/2015.
- */
-/*val sas = "sr=http%3a%2f%2ftb01-bede.servicebus.windows.net%2fgamingevents%2fsubscriptions%2fspark&sig=TX8F5KfNBNQfr2vlD0ju%2bPh4WJUnb6LbZhdBQSWVvj8%3d&se=1453559589&skn=spark"
-val subscriptionName = Some("spark")
+import com.elastacloud.azure.messaging.AzureMessageUtils
+import org.apache.spark.streaming.messaging.servicebus.AzureServiceBusSession
+
+val sas = "sr=https%3a%2f%2fsparkstreaming.servicebus.windows.net%2fgamingevents&sig=Xh0QLGhEsNpUEqXlTLbWceaHQz%2bllHURpdceVsNzVnM%3d&se=1457443054&skn=sparkpol"
+val subscriptionName = "spark-livedata"
 val topicName = "gamingevents"
-val namespace = "tb01-bede"*/
+val namespace = "sparkstreaming"
 
-
-
+val sender = new AzureServiceBusSession(namespace, topicName, Some(subscriptionName), sas)
+val utils = new AzureMessageUtils(sender)
+utils.send("test message")

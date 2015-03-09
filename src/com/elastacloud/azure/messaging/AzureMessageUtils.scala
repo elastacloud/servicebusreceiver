@@ -1,4 +1,4 @@
-package com.servicebus
+package com.elastacloud.azure.messaging
 
 import org.apache.spark.streaming.messaging.AzureMessagingSession
 
