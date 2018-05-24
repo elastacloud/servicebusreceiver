@@ -1,4 +1,3 @@
-# Summary
 An Apache Spark Service Bus Receiver. Currently works with Apache Spark 1.0+ but small ammendments can be done to work with 2.0+. Additionally a structured streaming approach can be undertaken in 2.0 to wrap and push the results into a DataFrame using the new Structured Streaming API.
 
 The Receiver supports both topics and subscriptions as well as queues.
